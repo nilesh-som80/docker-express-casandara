@@ -13,6 +13,7 @@ scylla_connection.connect().then((connection)=>{
     console.log('connected to scylla db using cassandra driver',connection);
 }).catch(err=>{
     console.log("db connection err",err);
+    process.exit(0);
 })
 
 app.use(logger('dev'));
