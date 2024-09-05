@@ -1,0 +1,34 @@
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: development
+    deploy:
+      mode: replicated
+      replicas: 2
+    restart: on-failure
+    expose:
+      - 3000
+    depends_on:
+      - db
+  db:
+    container_name: scylla-db
+    image: scylladb/scylla
+    volumes:
+      - "./scylladb:/var/lib/scylla"
+    expose:
+      - 9042
+    # ports:
+    #   - 10000:10000
+    # command: --api-address 0.0.0.0
+  cassandra-nginx:
+    container_name: cas_ng
+    image: nginx:latest
+    volumes:
+      - ./config:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - server
+
